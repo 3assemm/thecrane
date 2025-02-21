@@ -44,7 +44,7 @@
   "units": {
     "meters": "م",
     "tons": "طن",
-    "degrees": "درجة"
+    "degrees": "°"
   },
   "tables": {
     "title": "قائمة جداول الرافعات",
@@ -138,5 +138,68 @@
         "bestPractices": "أفضل الممارسات"
       }
     }
+  },
+  "admin": {
+    "cranesTab": "الرافعات",
+    "usersTab": "المستخدمين"
+  },
+  "htmlReport": {
+    "title": "تقرير حساب الرافعة",
+    "back": "رجوع",
+    "projectDetails": "تفاصيل المشروع",
+    "projectName": "اسم المشروع",
+    "location": "الموقع",
+    "date": "التاريخ",
+    "calculationResults": "نتائج الحساب",
+    "totalLoad": "الحمولة الكلية",
+    "boomAngle": "زاوية الذراع",
+    "minBoomLength": "الحد الأدنى لطول الذراع",
+    "buildingHeight": "ارتفاع المبنى",
+    "craneDistance": "مسافة حافة الرافعة",
+    "liftRadius": "نصف قطر الرفع",
+    "selectedCranes": "الرافعات المختارة",
+    "photos": "الصور",
+    "generatedBy": "تم إنشاؤه بواسطة"
+  },
+  "authModal": {
+    "loginTitle": "تسجيل الدخول",
+    "signUpTitle": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "namePlaceholder": "عاصم ملتزم",
+    "emailPlaceholder": "you@example.com",
+    "login": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "orContinueWith": "أو المتابعة باستخدام",
+    "signUpWithGoogle": "التسجيل باستخدام جوجل",
+    "signInWithGoogle": "تسجيل الدخول باستخدام جوجل",
+    "signingUp": "جاري إنشاء الحساب...",
+    "loggingIn": "جاري تسجيل الدخول...",
+    "verifyEmail": "يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "googleSignInSuccess": "تم تسجيل الدخول باستخدام جوجل بنجاح"
+  },
+  "adminPanel": {
+    "craneDataManagement": "إدارة بيانات الرافعات",
+    "uploadAllCraneData": "رفع جميع بيانات الرافعات",
+    "manufacturer": "الشركة المصنعة",
+    "model": "الموديل",
+    "capacity": "الحمولة",
+    "maxBoomLength": "الطول الأقصى للذراع",
+    "lastUpdated": "آخر تحديث"
+  },
+  "dashboard": {
+    "dashboard": "لوحة التحكم",
+    "cranesTable": "جداول الرافعات",
+    "contact": "تواصل معنا",
+    "styleGuide": "ستايلاتي",
+    "adminPanel": "لوحة الإدارة",
+    "logout": "تسجيل الخروج",
+    "totalExistingCalculations": "إجمالي الحسابات الحالية",
+    "totalCalculationsSinceRegistration": "إجمالي الحسابات منذ التسجيل",
+    "calculationHistory": "سجل الحسابات",
+    "actions": "الإجراءات",
+    "id": "المعرف"
   }
 }

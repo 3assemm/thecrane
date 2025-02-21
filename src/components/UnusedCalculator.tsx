@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calculator as CalculatorIcon, RotateCcw, Mail } from 'lucide-react';
-import { InputField } from '../InputField';
-import { ResultCard } from '../ResultCard';
-import { QrScanner } from '../QrScanner';
-import { useAuth } from '../../contexts/AuthContext';
+import { InputField } from './InputField';
+import { ResultCard } from './ResultCard';
+import { QrScanner } from './QrScanner';
+import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { calculateBoomAngle, calculateMinBoomLength, calculateTotalLoad, calculateVerticalHeight } from '../../utils/calculations';
 
 // Global state to persist calculator values
 let globalCalculatorState = {
@@ -23,22 +22,14 @@ let globalCalculatorState = {
   minVerticalHeight: 0
 };
 
-interface CraneCalculatorProps {
-  initialValues?: any;
-  editMode?: boolean;
-}
-
-export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
-  initialValues,
-  editMode = false
-}) => {
+export const CraneCalculator = () => {
   const { currentUser, resendVerificationEmail } = useAuth();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const { t } = useTranslation();
   const [showResults, setShowResults] = useState(false);
   const [values, setValues] = useState(globalCalculatorState);
   const [resending, setResending] = useState(false);
-  const location = useLocation();
 
   // Update global state when local state changes
   useEffect(() => {
@@ -73,7 +64,6 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     setResending(true);
     try {
       await resendVerificationEmail();
-      toast.success('Verification email sent!');
     } catch (error) {
       toast.error('Failed to send verification email');
     } finally {
@@ -131,8 +121,19 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     }
 
     if (!currentUser.emailVerified) {
-      toast.error( t('calculator.verificationRequired')
-      );
+      toast((t) => (
+        <div>
+          <p className="font-semibold">{t('calculator.verificationRequired')}</p>
+          <p className="text-sm">{t('auth.verifyEmail')}</p>
+        </div>
+      ), {
+        duration: 5000,
+        style: {
+          background: '#FEF3C7',
+          color: '#92400E',
+          padding: '16px',
+        },
+      });
       return;
     }
 
@@ -143,17 +144,8 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     setShowResults(true);
   };
 
-  const handleNext = async () => {
-    if (editMode && initialValues) {
-      try {
-        
-        navigate('/dashboard');
-      } catch (error) {
-        toast.error('Failed to update calculation');
-      }
-    } else {
-      navigate('/results', { state: { results: values } });
-    }
+  const handleNext = () => {
+    navigate('/results', { state: { results: values } });
   };
 
   const isCalculateDisabled = !currentUser || !currentUser.emailVerified;

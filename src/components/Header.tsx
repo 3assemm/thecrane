@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
 import {
   User,
@@ -26,12 +25,6 @@ import {
  * @module Header
  */
 
-// Interface for the Header component props
-interface HeaderProps {
-  isDark: boolean;
-  toggleTheme: () => void;
-}
-
 /**
  * Header component - the main navigation bar of the application.
  *
@@ -40,7 +33,7 @@ interface HeaderProps {
  * @param {() => void} props.toggleTheme - Function to toggle between light and dark themes.
  * @returns {React.ReactElement} The Header component.
  */
-export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
+export const Header: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const { t } = useTranslation();
@@ -69,9 +62,6 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  /**
-   * Handles user logout.
-   */
   const handleLogout = async () => {
     try {
       await logout();
@@ -83,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
   };
 
   return (
-    <header className="bg-black bg-opacity-90 text-white p-6 shadow-lg dark:bg-gray-900 dark:bg-opacity-90">
+    <header className="bg-black bg-opacity-90 text-white p-6 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo and App Name */}
         <Link to="/" className="flex items-center gap-2">
@@ -95,7 +85,6 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
               src="/crane-logo.svg"
               alt="NPCrane.com"
               className="h-12 w-auto"
-              style={{ filter: isDark ? 'invert(1)' : 'none' }}
             />
             <div className="flex items-center gap-2">
               <span>NPCrane.com</span>
@@ -112,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
             className="flex items-center gap-2 text-white hover:text-yellow-400 transition-colors"
           >
             <HelpCircle className="w-5 h-5" />
-            <span>{t('Help')}</span>
+            <span>{t('help.title')}</span>
           </Link>
 
           
@@ -142,29 +131,32 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <LayoutDashboard className="w-4 h-4" />
-                    {t('Dashboard')}
+                    {t('dashboard.dashboard')}
                   </Link>
 <Link
             to="/cranes-table-list"
             className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+            onClick={() => setIsMenuOpen(false)}
           >
             <Table className="w-5 h-5" />
-            <span>{t('CranesTable')}</span>
+            <span>{t('dashboard.cranesTable')}</span>
           </Link>
 
           <Link
             to="/contact"
             className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+            onClick={() => setIsMenuOpen(false)}
           >
             <Phone className="w-5 h-5" />
-            <span>{t('Contact')}</span>
+            <span>{t('dashboard.contact')}</span>
           </Link>
-						          <Link
+		          <Link
             to="/style-guide"
             className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+            onClick={() => setIsMenuOpen(false)}
           >
             <Palette className="w-5 h-5" />
-            <span>Style Guide</span>
+            <span>{t('dashboard.styleGuide')}</span>
           </Link>			
                   {/* Admin Panel Link (only for admin) */}
                   {isAdmin && (
@@ -174,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Shield className="w-4 h-4" />
-                      {t('AdminPanel')}
+                      {t('dashboard.adminPanel')}
                     </Link>
                   )}
 
@@ -207,9 +199,8 @@ export const Header: React.FC<HeaderProps> = ({ isDark, toggleTheme }) => {
             </div>
           )}
 
-          {/* Language and Theme Toggles */}
+          {/* Language Toggle */}
           <LanguageToggle />
-          <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
         </div>
       </div>
     </header>

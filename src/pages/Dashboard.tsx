@@ -13,42 +13,16 @@ import { Calculation } from '../types/calculation';
 import { generatePDF } from '../utils/pdfGenerator';
 import toast from 'react-hot-toast';
 import { useUserStats } from '../hooks/useUserStats';
-import { Header } from '../components/Header';
 
-/**
- * Dashboard Component
- *
- * Purpose:
- * The Dashboard component serves as the main landing page for authenticated users.
- * It displays user-specific statistics, a filterable list of calculations, and provides
- * navigation options to other parts of the application.
- *
- * Usage:
- * This component is rendered when the user navigates to the '/dashboard' route.
- * It requires the user to be authenticated.
- *
- * Functionality:
- * - Fetches and displays user statistics using the `useUserStats` hook.
- * - Fetches and displays a list of the user's calculations using the `useCalculations` hook.
- * - Provides filtering options for the calculations list through the `DashboardFilters` component.
- * - Displays the filtered calculations in a table format using the `CalculationTable` component.
- * - Handles user logout and navigation to other pages.
- * - Uses `react-router-dom` for navigation.
- * - Uses `react-hot-toast` for displaying notifications.
- * - Uses `framer-motion` for animations.
- * - Uses `useTheme` hook for theme management.
- *
- * @returns {React.ReactElement} The Dashboard component.
- */
 export const Dashboard = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const { stats } = useUserStats();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
   const {
     calculations,
     loading,
-    handleDelete, // This function was not being passed down before
+    handleDelete,
     searchTerm,
     setSearchTerm,
     startDate,
@@ -58,7 +32,6 @@ export const Dashboard = () => {
   } = useCalculations();
   const { t } = useTranslation();
 
-  // Check authentication and redirect if needed
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
@@ -115,8 +88,9 @@ export const Dashboard = () => {
         printWindow.print();
         printWindow.close();
       }
-    } catch (error) {
-      toast.error('Failed to print calculation');
+    } catch (error: any) {
+      console.error('Error printing calculation:', error);
+      toast.error(`Failed to print calculation: ${error.message}`);
     }
   };
 
@@ -126,7 +100,7 @@ export const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 p-8">
-      <Header isDark={isDark} toggleTheme={toggleTheme} />
+      
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Dashboard Statistics */}
         <DashboardStats stats={stats} />
