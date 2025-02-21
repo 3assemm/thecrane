@@ -1,0 +1,142 @@
+{
+  "appName": "NPCrane.com",
+  "calculator": {
+    "title": "Crane Size Calculator",
+    "buildingHeight": "Height of building or obstruction",
+    "craneEdgeDistance": "Centre of Crane to edge of Building obstruction",
+    "liftRadius": "Lift Radius (centre to centre)",
+    "requiredLoad": "Required Load to Lift",
+    "liftTackle": "Lift Tackle (in addition to item)",
+    "totalLoad": "Total Load to lift",
+    "boomAngle": "Angle of Boom",
+    "minBoomLength": "Minimum Boom Length",
+    "minVerticalHeight": "Minimum Vertical height of the Boom",
+    "calculate": "Calculate",
+    "next": "Next",
+    "reset": "Reset",
+    "results": "Calculation Results",
+    "back": "Back",
+    "backToResults": "Back to Results",
+    "loginRequired": "Please log in to use the calculator",
+    "verificationRequired": "Please verify your email to use the calculator"
+  },
+  "craneSelection": {
+    "title": "Crane Selection",
+    "backToResults": "Back to Results",
+    "back": "Back"
+  },
+  "profile": {
+    "title": "Profile",
+    "updateProfile": "Update Profile",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "updating": "Updating..."
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "processing": "Processing..."
+  },
+  "units": {
+    "meters": "m",
+    "tons": "T",
+    "degrees": "°"
+  },
+  "tables": {
+    "title": "Cranes Tables List",
+    "backToCalculator": "Back to Calculator"
+  },
+  "help": {
+    "title": "Help",
+    "backToCalculator": "Back to Calculator",
+    "searchPlaceholder": "Search help topics...",
+    "contents": "Contents",
+    "sections": {
+      "introduction": {
+        "title": "Introduction to NPCrane.com",
+        "description": "Professional crane size calculator",
+        "keyFeatures": "Key Features",
+        "features": {
+          "calculations": "Accurate crane size calculations",
+          "charts": "Comprehensive load charts",
+          "comparison": "Multiple crane comparison",
+          "reports": "Professional report generation",
+          "mobile": "Mobile-friendly interface",
+          "bilingual": "Bilingual support (English/Arabic)"
+        }
+      },
+      "gettingStarted": {
+        "title": "Getting Started",
+        "beforeYouBegin": "Before You Begin",
+        "steps": {
+          "createAccount": "Create an account or log in",
+          "verifyEmail": "Verify your email address",
+          "chooseLanguage": "Choose your preferred language",
+          "selectUnits": "Select your preferred units"
+        },
+        "accountTypes": {
+          "title": "Account Types",
+          "free": {
+            "title": "Free Account",
+            "features": {
+              "calculations": "10 free calculations",
+              "reports": "Basic report generation",
+              "database": "Access to crane database",
+              "support": "Email support"
+            }
+          },
+          "premium": {
+            "title": "Premium Account",
+            "features": {
+              "unlimited": "Unlimited calculations",
+              "advanced": "Advanced reporting features",
+              "priority": "Priority support",
+              "branding": "Custom branding",
+              "export": "Bulk export options"
+            }
+          }
+        }
+      },
+      "calculator": {
+        "title": "Using the Calculator",
+        "steps": {
+          "buildingDetails": "Enter Building Details",
+          "loadRequirements": "Specify Load Requirements",
+          "results": "Review Results"
+        }
+      },
+      "craneTables": {
+        "title": "Understanding Crane Tables",
+        "loadChart": "Load Chart Matrix",
+        "filtering": "Filtering & Sorting"
+      },
+      "qrFeatures": {
+        "title": "QR Code Features",
+        "scanning": "Scanning QR Codes",
+        "generating": "Generating QR Codes"
+      },
+      "reports": {
+        "title": "Reports & Documentation",
+        "types": {
+          "html": "HTML Report",
+          "pdf": "PDF Export",
+          "sharing": "Sharing Options"
+        }
+      },
+      "dashboard": {
+        "title": "Dashboard Features",
+        "management": "Managing Calculations",
+        "statistics": "Statistics & Analytics"
+      },
+      "proTips": {
+        "title": "Pro Tips",
+        "efficiency": "Efficiency Tips",
+        "bestPractices": "Best Practices"
+      }
+    }
+  }
+}

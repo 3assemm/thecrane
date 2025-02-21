@@ -1,0 +1,142 @@
+{
+  "appName": "NPCrane.com",
+  "calculator": {
+    "title": "حاسبة حجم الرافعة",
+    "buildingHeight": "ارتفاع المبنى أو العائق",
+    "craneEdgeDistance": "مركز الرافعة إلى حافة عائق البناء",
+    "liftRadius": "نصف قطر الرفع (من المركز إلى المركز)",
+    "requiredLoad": "الحمولة المطلوبة للرفع",
+    "liftTackle": "معدات الرفع (بالإضافة إلى العنصر)",
+    "totalLoad": "إجمالي الحمولة للرفع",
+    "boomAngle": "زاوية الذراع",
+    "minBoomLength": "الحد الأدنى لطول الذراع",
+    "minVerticalHeight": "الحد الأدنى للارتفاع العمودي للذراع",
+    "calculate": "احسب",
+    "next": "التالي",
+    "reset": "إعادة تعيين",
+    "results": "نتائج الحساب",
+    "back": "رجوع",
+    "backToResults": "العودة إلى النتائج",
+    "loginRequired": "يرجى تسجيل الدخول لاستخدام الحاسبة",
+    "verificationRequired": "يرجى التحقق من بريدك الإلكتروني لاستخدام الحاسبة"
+  },
+  "craneSelection": {
+    "title": "اختيار الرافعة",
+    "backToResults": "العودة إلى النتائج",
+    "back": "رجوع"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "updateProfile": "تحديث الملف الشخصي",
+    "changePassword": "تغيير كلمة المرور",
+    "newPassword": "كلمة المرور الجديدة",
+    "updating": "جاري التحديث..."
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "processing": "جاري المعالجة..."
+  },
+  "units": {
+    "meters": "م",
+    "tons": "طن",
+    "degrees": "درجة"
+  },
+  "tables": {
+    "title": "قائمة جداول الرافعات",
+    "backToCalculator": "العودة إلى الحاسبة"
+  },
+  "help": {
+    "title": "المساعدة",
+    "backToCalculator": "العودة إلى الحاسبة",
+    "searchPlaceholder": "البحث في مواضيع المساعدة...",
+    "contents": "المحتويات",
+    "sections": {
+      "introduction": {
+        "title": "مقدمة عن NPCrane.com",
+        "description": "حاسبة احترافية لحجم الرافعات",
+        "keyFeatures": "المميزات الرئيسية",
+        "features": {
+          "calculations": "حسابات دقيقة لحجم الرافعة",
+          "charts": "جداول حمولة شاملة",
+          "comparison": "مقارنة متعددة للرافعات",
+          "reports": "إنشاء تقارير احترافية",
+          "mobile": "واجهة متوافقة مع الأجهزة المحمولة",
+          "bilingual": "دعم اللغتين (العربية/الإنجليزية)"
+        }
+      },
+      "gettingStarted": {
+        "title": "البدء",
+        "beforeYouBegin": "قبل البدء",
+        "steps": {
+          "createAccount": "إنشاء حساب أو تسجيل الدخول",
+          "verifyEmail": "تأكيد البريد الإلكتروني",
+          "chooseLanguage": "اختيار اللغة المفضلة",
+          "selectUnits": "اختيار وحدات القياس"
+        },
+        "accountTypes": {
+          "title": "أنواع الحسابات",
+          "free": {
+            "title": "حساب مجاني",
+            "features": {
+              "calculations": "10 حسابات مجانية",
+              "reports": "إنشاء تقارير أساسية",
+              "database": "الوصول لقاعدة بيانات الرافعات",
+              "support": "دعم عبر البريد الإلكتروني"
+            }
+          },
+          "premium": {
+            "title": "حساب مميز",
+            "features": {
+              "unlimited": "حسابات غير محدودة",
+              "advanced": "ميزات تقارير متقدمة",
+              "priority": "دعم ذو أولوية",
+              "branding": "تخصيص العلامة التجارية",
+              "export": "خيارات تصدير متعددة"
+            }
+          }
+        }
+      },
+      "calculator": {
+        "title": "استخدام الحاسبة",
+        "steps": {
+          "buildingDetails": "إدخال تفاصيل المبنى",
+          "loadRequirements": "تحديد متطلبات الحمولة",
+          "results": "مراجعة النتائج"
+        }
+      },
+      "craneTables": {
+        "title": "فهم جداول الرافعات",
+        "loadChart": "مصفوفة جدول الحمولة",
+        "filtering": "التصفية والفرز"
+      },
+      "qrFeatures": {
+        "title": "ميزات رمز QR",
+        "scanning": "مسح رموز QR",
+        "generating": "إنشاء رموز QR"
+      },
+      "reports": {
+        "title": "التقارير والتوثيق",
+        "types": {
+          "html": "تقرير HTML",
+          "pdf": "تصدير PDF",
+          "sharing": "خيارات المشاركة"
+        }
+      },
+      "dashboard": {
+        "title": "ميزات لوحة التحكم",
+        "management": "إدارة الحسابات",
+        "statistics": "الإحصائيات والتحليلات"
+      },
+      "proTips": {
+        "title": "نصائح احترافية",
+        "efficiency": "نصائح للكفاءة",
+        "bestPractices": "أفضل الممارسات"
+      }
+    }
+  }
+}
