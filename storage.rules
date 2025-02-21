@@ -1,0 +1,49 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isValidFileSize() {
+      return request.resource.size <= 5 * 1024 * 1024; // 5MB
+    }
+    
+    // Temporary image storage - for user uploads before processing
+    match /temp/{userId}/images/{imageId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow create: if isAuthenticated() && isOwner(userId)
+                   && isImageType()
+                   && isValidFileSize();
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Report images - permanent storage for processed images
+    match /reports/{reportId}/images/{imageId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() 
+                   && isImageType()
+                   && isValidFileSize();
+      allow delete: if isAuthenticated() 
+                   && exists(/databases/$(database)/documents/calculations/$(reportId))
+                   && get(/databases/$(database)/documents/calculations/$(reportId)).data.userId == request.auth.uid;
+    }
+
+    // Company logos and branding assets
+    match /logos/{userId}/{imageId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isOwner(userId)
+                  && isImageType()
+                  && isValidFileSize();
+    }
+  }
+}

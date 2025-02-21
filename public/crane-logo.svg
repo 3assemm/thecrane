@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Base -->
+  <rect x="96" y="432" width="320" height="32" fill="#FCD34D"/>
+  
+  <!-- Crane Tower -->
+  <rect x="224" y="128" width="64" height="304" fill="#FCD34D"/>
+  
+  <!-- Crane Boom -->
+  <path d="M256 128L448 192L448 160L256 96L256 128Z" fill="#FCD34D"/>
+  
+  <!-- Crane Cable -->
+  <line x1="384" y1="176" x2="384" y2="288" stroke="#FCD34D" stroke-width="8"/>
+  
+  <!-- Hook -->
+  <path d="M368 288L400 288L384 320L368 288Z" fill="#FCD34D"/>
+  
+  <!-- NP Logo -->
+  <path d="M144 96L176 96L176 192L144 192L144 96Z" fill="#FCD34D"/>
+  <path d="M176 96L208 96L208 144L176 144L176 96Z" fill="#FCD34D"/>
+  <path d="M208 144L240 144L240 192L208 192L208 144Z" fill="#FCD34D"/>
+  <circle cx="272" cy="144" r="48" stroke="#FCD34D" stroke-width="32"/>
+</svg>
