@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input[type="number"] {
+    @apply border-gray-300 rounded-md;
+  }
+  
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    @apply opacity-100;
+  }
+
+  [dir="rtl"] {
+    text-align: right;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+  }
+
+  [dir="ltr"] {
+    text-align: left;
+  }
+}
+
+@layer components {
+  .input-with-unit {
+    @apply relative rounded-md shadow-sm;
+  }
+  
+  .input-with-unit input {
+    @apply block w-full rounded-md border-gray-300 pl-3 pr-12 focus:border-yellow-500 focus:ring-yellow-500;
+  }
+  
+  .input-with-unit span {
+    @apply absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500;
+  }
+
+  [dir="rtl"] .input-with-unit input {
+    @apply pl-12 pr-3;
+  }
+
+  [dir="rtl"] .input-with-unit span {
+    @apply right-auto left-0 pl-3 pr-0;
+  }
+
+  [dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+  }
+}
