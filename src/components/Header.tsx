@@ -131,7 +131,7 @@ export const Header: React.FC = () => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <LayoutDashboard className="w-4 h-4" />
-                    {t('dashboard.dashboard')}
+                    {t('dashboard.myDashboard')}
                   </Link>
 <Link
             to="/cranes-table-list"
@@ -156,7 +156,7 @@ export const Header: React.FC = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             <Palette className="w-5 h-5" />
-            <span>{t('dashboard.styleGuide')}</span>
+            <span>{t('dashboard.myStyles')}</span>
           </Link>			
                   {/* Admin Panel Link (only for admin) */}
                   {isAdmin && (

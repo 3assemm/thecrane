@@ -5,14 +5,14 @@ import { InputField } from '../InputField';
 import { ResultCard } from '../ResultCard';
 import { QrScanner } from '../QrScanner';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next'; // Import Trans
 import toast from 'react-hot-toast';
-import { calculateBoomAngle, calculateMinBoomLength, calculateTotalLoad, calculateVerticalHeight } from '../../utils/calculations';
 
-// Global state to persist calculator values
-let globalCalculatorState = {
+// Initial state for the calculator
+const INITIAL_VALUES = {
   buildingHeight: 3,
+  liftHeight: 0,
   craneEdgeDistance: 5,
   liftRadius: 5,
   requiredLoad: 0.5,
@@ -20,96 +20,97 @@ let globalCalculatorState = {
   totalLoad: 1,
   boomAngle: 0,
   minBoomLength: 0,
-  minVerticalHeight: 0
+  minVerticalHeight: 0,
 };
 
 interface CraneCalculatorProps {
-  initialValues?: any;
+  initialValues?: typeof INITIAL_VALUES;
   editMode?: boolean;
 }
 
 export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
   initialValues,
-  editMode = false
+  editMode = false,
 }) => {
   const { currentUser, resendVerificationEmail } = useAuth();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showResults, setShowResults] = useState(false);
-  const [values, setValues] = useState(globalCalculatorState);
+  const [values, setValues] = useState(initialValues || INITIAL_VALUES);
   const [resending, setResending] = useState(false);
+  const [hasCalculated, setHasCalculated] = useState(false); // Track if calculation has been done
   const location = useLocation();
-
-  // Update global state when local state changes
-  useEffect(() => {
-    globalCalculatorState = values;
-  }, [values]);
 
   // Initialize from location state if available
   useEffect(() => {
     if (location.state?.results) {
       setValues(location.state.results);
       setShowResults(true);
+      setHasCalculated(true); // Set hasCalculated to true if results are preloaded
     }
   }, [location.state]);
 
+  // Validate input values
+  const validateInput = (value: number) => {
+    if (isNaN(value) || value < 0) {
+      toast.error(t('calculator.invalidInput'));
+      return false;
+    }
+    return true;
+  };
+
+  // Handle input changes
   const handleInputChange = (field: string, value: number) => {
-    setValues(prev => {
+    if (!validateInput(value)) return;
+
+    setValues((prev) => {
       const newValues = {
         ...prev,
         [field]: value,
-        totalLoad: field === 'requiredLoad' || field === 'liftTackle' 
-          ? Number(value) + (field === 'requiredLoad' ? prev.liftTackle : prev.requiredLoad)
-          : prev.totalLoad
+        totalLoad:
+          field === 'requiredLoad' || field === 'liftTackle'
+            ? Number(value) + (field === 'requiredLoad' ? prev.liftTackle : prev.requiredLoad)
+            : prev.totalLoad,
       };
-      globalCalculatorState = newValues;
       return newValues;
     });
   };
 
+  // Resend verification email
   const handleResendVerification = async () => {
     if (resending) return;
-    
+
     setResending(true);
     try {
       await resendVerificationEmail();
-      toast.success('Verification email sent!');
+      toast.success(t('calculator.verificationEmailSent'));
     } catch (error) {
-      toast.error('Failed to send verification email');
+      toast.error(t('calculator.verificationEmailFailed'));
     } finally {
       setResending(false);
     }
   };
 
+  // Reset calculator to initial values
   const handleReset = () => {
-    const resetValues = {
-      buildingHeight: 0,
-      craneEdgeDistance: 0,
-      liftRadius: 0,
-      requiredLoad: 0,
-      liftTackle: 0,
-      totalLoad: 0,
-      boomAngle: 0,
-      minBoomLength: 0,
-      minVerticalHeight: 0
-    };
-    setValues(resetValues);
-    globalCalculatorState = resetValues;
+    setValues(INITIAL_VALUES);
     setShowResults(false);
+    setHasCalculated(false); // Reset hasCalculated on reset
   };
 
+  // Calculate crane lift parameters
   const calculateCraneLift = () => {
-    const { buildingHeight, craneEdgeDistance, liftRadius } = values;
-    
+    const { buildingHeight, craneEdgeDistance, liftRadius, liftHeight } = values;
+
     // Calculate minimum angle needed to clear the building
     const obstructionAngle = Math.atan2(buildingHeight, craneEdgeDistance) * (180 / Math.PI);
-    
+
     // Calculate angle needed to reach the lift point
-    const liftAngle = Math.atan2(buildingHeight, liftRadius) * (180 / Math.PI);
-    
+    const liftAngle = Math.atan2(liftHeight, liftRadius) * (180 / Math.PI);
+
     // Use the larger angle to ensure clearance
     const requiredAngle = Math.max(obstructionAngle, liftAngle);
-    
+
     // Calculate minimum boom length using trigonometry
     const angleInRadians = requiredAngle * (Math.PI / 180);
     const minBoomLength = liftRadius / Math.cos(angleInRadians);
@@ -120,10 +121,11 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     return {
       boomAngle: Number(requiredAngle.toFixed(1)),
       minBoomLength: Number(minBoomLength.toFixed(1)),
-      minVerticalHeight: Number(minVerticalHeight.toFixed(1))
+      minVerticalHeight: Number(minVerticalHeight.toFixed(1)),
     };
   };
 
+  // Handle calculate button click
   const handleCalculate = () => {
     if (!currentUser) {
       toast.error(t('calculator.loginRequired'));
@@ -131,26 +133,21 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     }
 
     if (!currentUser.emailVerified) {
-      toast.error( t('calculator.verificationRequired')
-      );
+      toast.error(t('calculator.verificationRequired'));
       return;
     }
 
     const results = calculateCraneLift();
     const newValues = { ...values, ...results };
     setValues(newValues);
-    globalCalculatorState = newValues;
     setShowResults(true);
+    setHasCalculated(true); // Set hasCalculated to true after calculation
   };
 
-  const handleNext = async () => {
+  // Handle next button click
+  const handleNext = () => {
     if (editMode && initialValues) {
-      try {
-        
-        navigate('/dashboard');
-      } catch (error) {
-        toast.error('Failed to update calculation');
-      }
+      navigate('/dashboard');
     } else {
       navigate('/results', { state: { results: values } });
     }
@@ -159,7 +156,7 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
   const isCalculateDisabled = !currentUser || !currentUser.emailVerified;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden transition-colors duration-200"
@@ -185,27 +182,6 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
       <div className="p-4 sm:p-6 space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <InputField
-            label={t('calculator.buildingHeight')}
-            value={values.buildingHeight}
-            onChange={(value) => handleInputChange('buildingHeight', value)}
-            unit={t('units.meters')}
-            type="height"
-          />
-          <InputField
-            label={t('calculator.craneEdgeDistance')}
-            value={values.craneEdgeDistance}
-            onChange={(value) => handleInputChange('craneEdgeDistance', value)}
-            unit={t('units.meters')}
-            type="radius"
-          />
-          <InputField
-            label={t('calculator.liftTackle')}
-            value={values.liftTackle}
-            onChange={(value) => handleInputChange('liftTackle', value)}
-            unit={t('units.tons')}
-            type="load"
-          />
-          <InputField
             label={t('calculator.requiredLoad')}
             value={values.requiredLoad}
             onChange={(value) => handleInputChange('requiredLoad', value)}
@@ -219,6 +195,40 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
             unit={t('units.meters')}
             type="radius"
           />
+          <InputField
+            label={t('calculator.liftTackle')}
+            value={values.liftTackle}
+            onChange={(value) => handleInputChange('liftTackle', value)}
+            unit={t('units.tons')}
+            type="load"
+          />
+          <InputField
+            label={t('calculator.liftHeight')}
+            value={values.liftHeight}
+            onChange={(value) => handleInputChange('liftHeight', value)}
+            unit={t('units.meters')}
+            type="height"
+          />
+
+          {/* Add the descriptive text here */}
+          <div className="col-span-full text-sm text-gray-600 dark:text-gray-400">
+            {t('calculator.obstructionHint')}
+          </div>
+
+          <InputField
+            label={t('calculator.buildingHeight')}
+            value={values.buildingHeight}
+            onChange={(value) => handleInputChange('buildingHeight', value)}
+            unit={t('units.meters')}
+            type="height"
+          />
+          <InputField
+            label={t('calculator.craneEdgeDistance')}
+            value={values.craneEdgeDistance}
+            onChange={(value) => handleInputChange('craneEdgeDistance', value)}
+            unit={t('units.meters')}
+            type="radius"
+          />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
@@ -229,21 +239,8 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
             disabled={isCalculateDisabled}
             className="flex-1 bg-yellow-400 dark:bg-yellow-500 text-black dark:text-white py-3 px-6 rounded-lg font-semibold hover:bg-yellow-500 dark:hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t('calculator.calculate')}
+            {hasCalculated ? t('calculator.reCalculate') : t('calculator.calculate')}
           </motion.button>
-
-          {showResults && (
-            <motion.button
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleNext}
-              className="flex-1 bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition-colors"
-            >
-              {t('calculator.next')}
-            </motion.button>
-          )}
         </div>
 
         {showResults && (
@@ -255,23 +252,42 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
               <ResultCard label={t('calculator.minBoomLength')} value={values.minBoomLength} unit={t('units.meters')} />
               <ResultCard label={t('calculator.minVerticalHeight')} value={values.minVerticalHeight} unit={t('units.meters')} />
             </div>
+
+            {/* Move the "Next" button here */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleNext}
+              className="w-full mt-6 bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+            >
+              {t('calculator.next')}
+            </motion.button>
           </div>
         )}
 
-        {!currentUser && (
+        {!currentUser ? (
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            {t('calculator.loginRequired')}
+            <Trans
+              i18nKey="calculator.loginOrSignup"
+              components={[
+                <Link to="/login" className="text-yellow-600 hover:underline" />,
+                <Link to="/signup" className="text-yellow-600 hover:underline" />,
+              ]}
+            />
           </p>
-        )}
-        {currentUser && !currentUser.emailVerified && (
-          <button
-            onClick={handleResendVerification}
-            disabled={resending}
-            className="w-full text-center text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 flex items-center justify-center gap-2"
-          >
-            <Mail className="w-4 h-4" />
-            {resending ? 'Sending verification email...' : t('calculator.verificationRequired')}
-          </button>
+        ) : (
+          currentUser && !currentUser.emailVerified && (
+            <button
+              onClick={handleResendVerification}
+              disabled={resending}
+              className="w-full text-center text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 flex items-center justify-center gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              {resending ? t('calculator.sendingVerificationEmail') : t('calculator.verificationRequired')}
+            </button>
+          )
         )}
       </div>
     </motion.div>
