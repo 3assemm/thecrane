@@ -1,3 +1,4 @@
+//calculator.tsx from deepseek v1
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Calculator as CalculatorIcon, RotateCcw, Mail } from 'lucide-react';
@@ -11,9 +12,9 @@ import toast from 'react-hot-toast';
 
 // Initial state for the calculator
 const INITIAL_VALUES = {
-  buildingHeight: 3,
-  liftHeight: 0,
-  craneEdgeDistance: 5,
+  buildingHeight: 0, //Height of building or obstruction
+  liftHeight: 2,
+  craneEdgeDistance: 0, //Centre of Crane to edge of Building obstruction
   liftRadius: 5,
   requiredLoad: 0.5,
   liftTackle: 0.5,
@@ -39,6 +40,7 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
   const [values, setValues] = useState(initialValues || INITIAL_VALUES);
   const [resending, setResending] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false); // Track if calculation has been done
+  const [hasObstruction, setHasObstruction] = useState(false); // Track if obstruction fields are active
   const location = useLocation();
 
   // Initialize from location state if available
@@ -96,20 +98,24 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
     setValues(INITIAL_VALUES);
     setShowResults(false);
     setHasCalculated(false); // Reset hasCalculated on reset
+    setHasObstruction(false); // Reset obstruction checkbox
   };
 
   // Calculate crane lift parameters
   const calculateCraneLift = () => {
     const { buildingHeight, craneEdgeDistance, liftRadius, liftHeight } = values;
 
-    // Calculate minimum angle needed to clear the building
-    const obstructionAngle = Math.atan2(buildingHeight, craneEdgeDistance) * (180 / Math.PI);
+    let obstructionAngle = 0;
+    if (hasObstruction) {
+      // Calculate minimum angle needed to clear the building
+      obstructionAngle = Math.atan2(buildingHeight, craneEdgeDistance) * (180 / Math.PI);
+    }
 
     // Calculate angle needed to reach the lift point
     const liftAngle = Math.atan2(liftHeight, liftRadius) * (180 / Math.PI);
 
     // Use the larger angle to ensure clearance
-    const requiredAngle = Math.max(obstructionAngle, liftAngle);
+    const requiredAngle = hasObstruction ? Math.max(obstructionAngle, liftAngle) : liftAngle;
 
     // Calculate minimum boom length using trigonometry
     const angleInRadians = requiredAngle * (Math.PI / 180);
@@ -215,20 +221,39 @@ export const CraneCalculator: React.FC<CraneCalculatorProps> = ({
             {t('calculator.obstructionHint')}
           </div>
 
-          <InputField
-            label={t('calculator.buildingHeight')}
-            value={values.buildingHeight}
-            onChange={(value) => handleInputChange('buildingHeight', value)}
-            unit={t('units.meters')}
-            type="height"
-          />
-          <InputField
-            label={t('calculator.craneEdgeDistance')}
-            value={values.craneEdgeDistance}
-            onChange={(value) => handleInputChange('craneEdgeDistance', value)}
-            unit={t('units.meters')}
-            type="radius"
-          />
+          {/* Checkbox to toggle obstruction fields */}
+          <div className="col-span-full flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="hasObstruction"
+              checked={hasObstruction}
+              onChange={(e) => setHasObstruction(e.target.checked)}
+              className="w-4 h-4"
+            />
+            <label htmlFor="hasObstruction" className="text-sm text-gray-600 dark:text-gray-400">
+              {t('calculator.hasObstruction')}
+            </label>
+          </div>
+
+          {/* Conditionally render obstruction fields */}
+          {hasObstruction && (
+            <>
+              <InputField
+                label={t('calculator.buildingHeight')}
+                value={values.buildingHeight}
+                onChange={(value) => handleInputChange('buildingHeight', value)}
+                unit={t('units.meters')}
+                type="height"
+              />
+              <InputField
+                label={t('calculator.craneEdgeDistance')}
+                value={values.craneEdgeDistance}
+                onChange={(value) => handleInputChange('craneEdgeDistance', value)}
+                unit={t('units.meters')}
+                type="radius"
+              />
+            </>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4">
